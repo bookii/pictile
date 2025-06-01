@@ -1,6 +1,6 @@
 <script lang="ts">
   import "./app.css";
-  const message = "Hello world!";
+  import ConfigMenu from "$lib/components/ConfigMenu.svelte";
 </script>
 
-<div class="text-9xl">{message}</div>
+<ConfigMenu />
