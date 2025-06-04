@@ -14,14 +14,6 @@
   });
 </script>
 
-<ControlPanel />
-<div>{message}</div>
-<button
-  onclick={() => {
-    broadcastChannel.postMessage("Hello from Dock!");
-    message = "Sent: Hello from Dock!";
-  }}
-  class="bg-primary text-primary-foreground px-4 py-2 rounded"
->
-  Hello from Dock!
-</button>
+<div class="p-2 space-y-2 bg-background min-h-screen">
+  <ControlPanel />
+</div>
