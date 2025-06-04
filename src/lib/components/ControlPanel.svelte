@@ -7,7 +7,7 @@
   import { Minus, Plus } from "lucide-svelte";
 
   let isPlacehoderVisible = $state(true);
-  let imageSpacingRem = $state(5);
+  let imageSpacingRem = $state(0.5);
   let columnCount = $state(5);
   let rowCount = $state(4);
 </script>
@@ -45,7 +45,7 @@
               }}
               disabled={columnCount <= 1}
             >
-              <Minus strokeWidth={2.5} className="size-4 text-foreground" />
+              <Minus strokeWidth={2} className="size-4 text-foreground" />
             </Button>
             <div class="text-center w-12 text-foreground">{columnCount}</div>
             <Button
@@ -56,11 +56,11 @@
               }}
               disabled={columnCount >= 10}
             >
-              <Plus strokeWidth={2.5} className="size-4 text-foreground" />
+              <Plus strokeWidth={2} className="size-4 text-foreground" />
             </Button>
           </div>
         </div>
-        <div class="space-y-2.5 pb-0.5">
+        <div class="space-y-2.5">
           <Label class="text-foreground">行数</Label>
           <div class="flex items-center">
             <Button
@@ -71,7 +71,7 @@
               }}
               disabled={rowCount <= 1}
             >
-              <Minus strokeWidth={2.5} className="size-4 text-foreground" />
+              <Minus strokeWidth={2} className="size-4 text-foreground" />
             </Button>
             <div class="text-center w-12 text-foreground">{rowCount}</div>
             <Button
@@ -82,7 +82,7 @@
               }}
               disabled={rowCount >= 10}
             >
-              <Plus strokeWidth={2.5} className="size-4 text-foreground" />
+              <Plus strokeWidth={2} className="size-4 text-foreground" />
             </Button>
           </div>
         </div>
