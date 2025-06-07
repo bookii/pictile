@@ -21,7 +21,16 @@ export const messageSchema = v.union([
     type: v.literal("control"),
     control: controlSchema,
   }),
+  v.object({
+    type: v.literal("initialize_source_request"),
+  }),
+  v.object({
+    type: v.literal("initialize_source_response"),
+    images: v.array(imageSchema),
+    control: controlSchema,
+  }),
 ]);
 
 export type Image = v.InferOutput<typeof imageSchema>;
 export type Control = v.InferOutput<typeof controlSchema>;
+export type Message = v.InferOutput<typeof messageSchema>;

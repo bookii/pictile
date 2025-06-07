@@ -3,8 +3,8 @@
   import ControlPanel from "$lib/components/ControlPanel.svelte";
   import { Constants } from "$lib/constants.js";
   import DropZone from "$lib/components/DropZone.svelte";
-  import { messageSchema, type Control } from "$lib/schema";
-  import type { Image } from "$lib/schema";
+  import { messageSchema } from "$lib/schema";
+  import type { Control, Image, Message } from "$lib/schema";
   import { ulid } from "ulid";
   import * as v from "valibot";
   import { convertImageFileToBlob } from "$lib/utils";
@@ -27,7 +27,7 @@
 
   const onDropSuccess = async (file: File) => {
     if (Object.keys(imageRecord).length >= Constants.MAX_IMAGE_COUNT) {
-      // toast 表示
+      // TODO: toast 表示
       console.error("Maximum image count exceeded");
       return;
     }
@@ -43,7 +43,6 @@
       image,
     });
     blobUrlString = URL.createObjectURL(blob);
-    console.log(image.blob);
   };
 
   const messageHandler = async (event: MessageEvent) => {
@@ -55,9 +54,23 @@
     const message = parseResult.output;
     switch (message.type) {
       case "control":
-        control = message.control;
+        console.error("message 'control' must not be received in Dock");
+        break;
       case "image":
-        console.error("message must not be received in Dock");
+        console.error("message 'image' must not be received in Dock");
+        break;
+      case "initialize_source_request":
+        const responseMessage: Message = {
+          type: "initialize_source_response",
+          images: Object.values({ ...imageRecord }),
+          control: { ...control },
+        };
+        broadcastChannel.postMessage(responseMessage);
+        break;
+      case "initialize_source_response":
+        console.error(
+          "message 'initialize_source_response' must not be received in Dock"
+        );
         break;
     }
   };
