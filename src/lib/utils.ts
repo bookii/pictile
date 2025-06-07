@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import reduce from "image-blob-reduce";
+import { Constants } from "$lib/constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -14,4 +16,8 @@ export type WithoutChildren<T> = T extends { children?: any }
 export type WithoutChildrenOrChild<T> = WithoutChildren<WithoutChild<T>>;
 export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & {
   ref?: U | null;
+};
+
+export const convertImageFileToBlob = async (file: File): Promise<Blob> => {
+  return reduce().toBlob(file, { max: Constants.MAX_IMAGE_SIZE_PX });
 };

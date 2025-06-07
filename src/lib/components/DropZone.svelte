@@ -1,13 +1,15 @@
 <script lang="ts">
+  import { is } from "valibot";
   import Label from "./ui/label/label.svelte";
-  import { ImagePlus } from "lucide-svelte";
+  import { ImagePlus, LoaderCircle } from "lucide-svelte";
 
   type Props = {
-    onDropSuccess: (file: File) => void;
+    onDropSuccess: (file: File) => Promise<void>;
     onDropFailure: (message: string) => void;
   };
   const { onDropSuccess, onDropFailure }: Props = $props();
   let isValidDragEvent = $state(false);
+  let isProcessing = $state(false);
 
   const onDragOver = (event: DragEvent) => {
     if (event.dataTransfer?.types.includes("Files")) {
@@ -36,13 +38,23 @@
       return;
     }
     const file = files[0];
-    onDropSuccess(file);
+    if (!file.type.startsWith("image/")) {
+      onDropFailure("無効なファイル形式です");
+      return;
+    }
+    if (file.size > 1024 * 1024) {
+      onDropFailure("ファイルサイズは1MB以下にしてください");
+      return;
+    }
+    isProcessing = true;
+    await onDropSuccess(file);
+    isProcessing = false;
   };
 </script>
 
 <div
   role="form"
-  class="flex items-center w-full h-28 rounded-lg text-center {isValidDragEvent
+  class="flex relative items-center w-full h-28 rounded-lg text-center {isValidDragEvent
     ? 'bg-primary'
     : 'bg-secondary'}"
   ondragover={onDragOver}
@@ -50,9 +62,19 @@
   ondrop={onDrop}
 >
   <div
-    class="flex size-full items-center justify-center flex-col space-y-2 mx-auto pb-1"
+    class="flex absolute size-full items-center justify-center flex-col space-y-2 mx-auto pb-1"
   >
     <ImagePlus strokeWidth={1.5} class="size-6 text-foreground" />
     <Label class="text-foreground">ここに画像をドロップ</Label>
   </div>
+  {#if isProcessing}
+    <div
+      class="flex absolute size-full items-center justify-center bg-background/50 z-10"
+    >
+      <LoaderCircle
+        strokeWidth={1.5}
+        class="size-7 text-foreground animate-spin"
+      />
+    </div>
+  {/if}
 </div>

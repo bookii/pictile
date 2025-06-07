@@ -1,15 +1,16 @@
 <script lang="ts">
   import * as Accordion from "$lib/components/ui/accordion/index";
-  import Button from "./ui/button/button.svelte";
-  import Label from "./ui/label/label.svelte";
-  import Slider from "./ui/slider/slider.svelte";
-  import Switch from "./ui/switch/switch.svelte";
+  import Button from "$lib/components/ui/button/button.svelte";
+  import Label from "$lib/components/ui/label/label.svelte";
+  import Slider from "$lib/components/ui/slider/slider.svelte";
+  import Switch from "$lib/components/ui/switch/switch.svelte";
+  import type { Control } from "$lib/schema";
   import { Minus, Plus } from "lucide-svelte";
 
-  let isPlacehoderVisible = $state(true);
-  let imageSpacingRem = $state(0.5);
-  let columnCount = $state(5);
-  let rowCount = $state(4);
+  type Props = {
+    control: Control;
+  };
+  let { control = $bindable() }: Props = $props();
 </script>
 
 <Accordion.Root type="single" class="border border-border rounded-lg">
@@ -21,7 +22,7 @@
       <div class="space-y-6">
         <div class="flex justify-between pb-0.5">
           <Label class="text-foreground">プレースホルダーの表示</Label>
-          <Switch bind:checked={isPlacehoderVisible} />
+          <Switch bind:checked={control.isPlaceholderVisible} />
         </div>
         <div class="space-y-3.5 pb-1">
           <Label class="text-foreground">画像の間隔</Label>
@@ -31,7 +32,7 @@
             min={0}
             max={1.5}
             step={0.25}
-            bind:value={imageSpacingRem}
+            bind:value={control.imageSpacingRem}
           />
         </div>
         <div class="space-y-2.5">
@@ -41,20 +42,22 @@
               variant="secondary"
               class="size-7"
               onclick={() => {
-                columnCount--;
+                control.columnCount--;
               }}
-              disabled={columnCount <= 1}
+              disabled={control.columnCount <= 1}
             >
               <Minus strokeWidth={2} className="size-4 text-foreground" />
             </Button>
-            <div class="text-center w-12 text-foreground">{columnCount}</div>
+            <div class="text-center w-12 text-foreground">
+              {control.columnCount}
+            </div>
             <Button
               variant="secondary"
               class="size-7"
               onclick={() => {
-                columnCount++;
+                control.columnCount++;
               }}
-              disabled={columnCount >= 10}
+              disabled={control.columnCount >= 10}
             >
               <Plus strokeWidth={2} className="size-4 text-foreground" />
             </Button>
@@ -67,20 +70,22 @@
               variant="secondary"
               class="size-7"
               onclick={() => {
-                rowCount--;
+                control.rowCount--;
               }}
-              disabled={rowCount <= 1}
+              disabled={control.rowCount <= 1}
             >
               <Minus strokeWidth={2} className="size-4 text-foreground" />
             </Button>
-            <div class="text-center w-12 text-foreground">{rowCount}</div>
+            <div class="text-center w-12 text-foreground">
+              {control.rowCount}
+            </div>
             <Button
               variant="secondary"
               class="size-7"
               onclick={() => {
-                rowCount++;
+                control.rowCount++;
               }}
-              disabled={rowCount >= 10}
+              disabled={control.rowCount >= 10}
             >
               <Plus strokeWidth={2} className="size-4 text-foreground" />
             </Button>
