@@ -3,53 +3,40 @@
   import { ImagePlus } from "lucide-svelte";
 
   type Props = {
-    onDropFile: (file: File) => void;
-    onDropUrl: (url: string) => void;
-    onInvalidDrop: (message: string) => void;
+    onDropSuccess: (file: File) => void;
+    onDropFailure: (message: string) => void;
   };
-  const { onDropFile, onDropUrl, onInvalidDrop }: Props = $props();
+  const { onDropSuccess, onDropFailure }: Props = $props();
   let isValidDragEvent = $state(false);
 
   const onDragOver = (event: DragEvent) => {
-    if (
-      event.dataTransfer?.types.includes("text/uri-list") ||
-      event.dataTransfer?.types.includes("Files")
-    ) {
+    if (event.dataTransfer?.types.includes("Files")) {
       event.preventDefault();
       isValidDragEvent = true;
     }
   };
 
-  const onDragLeave = (event: DragEvent) => {
+  const onDragLeave = () => {
     isValidDragEvent = false;
   };
 
   const onDrop = async (event: DragEvent) => {
     isValidDragEvent = false;
-    if (event.dataTransfer?.types.includes("Files")) {
-      event.preventDefault();
-      const files = event.dataTransfer.files;
-      if (files.length === 0) {
-        console.error("No files found");
-        return;
-      }
-      if (files.length > 1) {
-        onInvalidDrop("画像は1つずつドロップしてください");
-        return;
-      }
-      const file = files[0];
-      // TODO: バリデーション
-      onDropFile(file);
-    } else if (event.dataTransfer?.types.includes("text/uri-list")) {
-      event.preventDefault();
-      const url = event.dataTransfer.getData("text/uri-list");
-      if (false) {
-        // TODO: バリデーション
-        onInvalidDrop("無効なURLです");
-        return;
-      }
-      onDropUrl(url);
+    if (event.dataTransfer?.types.includes("Files") !== true) {
+      return;
     }
+    event.preventDefault();
+    const files = event.dataTransfer.files;
+    if (files.length === 0) {
+      console.error("No files found");
+      return;
+    }
+    if (files.length > 1) {
+      onDropFailure("画像は1つずつドロップしてください");
+      return;
+    }
+    const file = files[0];
+    onDropSuccess(file);
   };
 </script>
 
