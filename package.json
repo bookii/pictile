@@ -1,5 +1,5 @@
 {
-  "name": "package.json",
+  "name": "pictile",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,7 +9,8 @@
     "build:dock": "vite build --mode dock",
     "build:source": "vite build --mode source",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json"
+    "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
+    "extract-licenses": "pnpm license-checker --customPath ./license-format.json --json | node scripts/generate-license.js"
   },
   "devDependencies": {
     "@internationalized/date": "^3.8.1",
@@ -24,6 +25,7 @@
     "clsx": "^2.1.1",
     "dexie": "^4.0.11",
     "image-blob-reduce": "^4.1.0",
+    "license-checker": "^25.0.1",
     "lucide-svelte": "^0.513.0",
     "mode-watcher": "^1.0.7",
     "svelte": "^5.28.1",
