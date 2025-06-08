@@ -2,9 +2,9 @@
   import * as Accordion from "$lib/components/ui/accordion/index";
   import Button from "$lib/components/ui/button/button.svelte";
   import Label from "$lib/components/ui/label/label.svelte";
+  import Separator from "$lib/components/ui/separator/separator.svelte";
   import Slider from "$lib/components/ui/slider/slider.svelte";
   import Switch from "$lib/components/ui/switch/switch.svelte";
-  import Separator from "$lib/components/ui/separator/separator.svelte";
   import type { Control } from "$lib/schema";
   import { Minus, Plus } from "lucide-svelte";
   import ClearButton from "./ClearButton.svelte";

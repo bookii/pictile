@@ -1,6 +1,5 @@
-import { controlSchema } from "$lib/schema";
-import type { Image, Control } from "$lib/schema";
 import { Constants } from "$lib/constants";
+import type { Control, Image } from "$lib/schema";
 import Dexie, { type EntityTable } from "dexie";
 
 type InsertControl = Omit<Control, "id">;

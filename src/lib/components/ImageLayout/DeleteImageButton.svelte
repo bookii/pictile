@@ -1,8 +1,8 @@
 <script lang="ts">
   import * as AlertDialog from "$lib/components/ui/alert-dialog/index";
-  import { X } from "lucide-svelte";
   import Button from "$lib/components/ui/button/button.svelte";
   import type { Image } from "$lib/schema";
+  import { X } from "lucide-svelte";
 
   type Props = {
     image: Image;

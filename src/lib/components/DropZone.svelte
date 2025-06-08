@@ -1,7 +1,6 @@
 <script lang="ts">
-  import { is } from "valibot";
-  import Label from "./ui/label/label.svelte";
   import { ImagePlus, LoaderCircle } from "lucide-svelte";
+  import Label from "./ui/label/label.svelte";
 
   type Props = {
     onDropSuccess: (files: File[]) => Promise<void>;

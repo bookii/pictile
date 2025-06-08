@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { Constants } from "$lib/constants";
-  import { messageSchema } from "$lib/schema";
-  import type { Control, Image, Message } from "$lib/schema";
   import ImageMatrix from "$lib/components/ImageLayout/ImageMatrix.svelte";
-  import * as v from "valibot";
+  import { Constants } from "$lib/constants";
   import { DBClient } from "$lib/db-client";
+  import type { Control, Image } from "$lib/schema";
+  import { messageSchema } from "$lib/schema";
+  import * as v from "valibot";
 
   const broadcastChannel = new BroadcastChannel(
     Constants.BROADCAST_CHANNEL_NAME

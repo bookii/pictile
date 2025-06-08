@@ -1,14 +1,14 @@
 <script lang="ts">
-  import "./app.css";
   import ControlPanel from "$lib/components/ControlPanel.svelte";
-  import { Constants } from "$lib/constants.js";
   import DropZone from "$lib/components/DropZone.svelte";
+  import ImageMatrix from "$lib/components/ImageLayout/ImageMatrix.svelte";
+  import { Toaster } from "$lib/components/ui/sonner";
+  import { Constants } from "$lib/constants.js";
+  import { DBClient } from "$lib/db-client";
   import type { Control, Image, Message } from "$lib/schema";
   import { imageFileToBlob } from "$lib/utils";
-  import ImageMatrix from "$lib/components/ImageLayout/ImageMatrix.svelte";
-  import { DBClient } from "$lib/db-client";
-  import { Toaster } from "$lib/components/ui/sonner";
   import { toast } from "svelte-sonner";
+  import "./app.css";
 
   type Props = {
     shouldUpdateControl: boolean;
