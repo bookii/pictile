@@ -7,8 +7,9 @@
   import type { Control, Image, Message } from "$lib/schema";
   import { ulid } from "ulid";
   import * as v from "valibot";
-  import { convertImageFileToBlob } from "$lib/utils";
+  import { imageFileToBlob } from "$lib/utils";
   import ImageMatrix from "$lib/components/ImageLayout/ImageMatrix.svelte";
+  import { loadImages, saveImages } from "$lib/store";
 
   type Props = {
     controlSnapshot: string;
@@ -32,7 +33,7 @@
       return;
     }
     const id = ulid();
-    const blob = await convertImageFileToBlob(file);
+    const blob = await imageFileToBlob(file);
     const image: Image = {
       id,
       blob,
@@ -43,6 +44,7 @@
       image,
     };
     broadcastChannel.postMessage(message);
+    saveImages(images);
   };
 
   const onDelete = (id: string) => {
@@ -52,6 +54,7 @@
       id,
     };
     broadcastChannel.postMessage(message);
+    saveImages(images);
   };
 
   const messageHandler = async (event: MessageEvent) => {
@@ -89,6 +92,12 @@
         break;
     }
   };
+
+  $effect(() => {
+    loadImages().then((loadedImages) => {
+      images = loadedImages;
+    });
+  });
 
   $effect(() => {
     broadcastChannel.addEventListener("message", messageHandler);

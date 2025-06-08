@@ -5,6 +5,12 @@ export const imageSchema = v.object({
   blob: v.blob(),
 });
 
+export const savedImageSchema = v.object({
+  id: v.pipe(v.string(), v.ulid()),
+  arrayBufferString: v.string(),
+  type: v.string(),
+});
+
 export const controlSchema = v.object({
   isPlaceholderVisible: v.boolean(),
   imageSpacingRem: v.number(),
@@ -31,5 +37,6 @@ export const messageSchema = v.union([
 ]);
 
 export type Image = v.InferOutput<typeof imageSchema>;
+export type SavedImage = v.InferOutput<typeof savedImageSchema>;
 export type Control = v.InferOutput<typeof controlSchema>;
 export type Message = v.InferOutput<typeof messageSchema>;

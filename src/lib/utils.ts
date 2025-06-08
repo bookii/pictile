@@ -18,6 +18,6 @@ export type WithElementRef<T, U extends HTMLElement = HTMLElement> = T & {
   ref?: U | null;
 };
 
-export const convertImageFileToBlob = async (file: File): Promise<Blob> => {
+export const imageFileToBlob = async (file: File): Promise<Blob> => {
   return reduce().toBlob(file, { max: Constants.MAX_IMAGE_SIZE_PX });
 };
