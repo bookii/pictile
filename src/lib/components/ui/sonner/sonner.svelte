@@ -11,6 +11,12 @@
 <Sonner
   theme={mode.current}
   class="toaster group"
-  style="--normal-bg: var(--popover); --normal-text: var(--foreground); --normal-border: var(--border);"
+  style="--normal-bg: var(--popover); --normal-text: var(--foreground); --normal-border: var(--border); font-family: inherit;"
   {...restProps}
 />
+
+<style>
+  :global(.toaster [data-sonner-toast] [data-content]) {
+    font-size: 0.75rem !important;
+  }
+</style>
