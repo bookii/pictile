@@ -13,7 +13,7 @@ export const Constants: ConstantsType = {
   MAX_IMAGE_COUNT: 100,
   DEFAULT_CONTROL: {
     isPlaceholderVisible: true,
-    imageSpacingRem: 0.5,
+    imageSpacingRem: 1,
     columnCount: 5,
     rowCount: 4,
   },
