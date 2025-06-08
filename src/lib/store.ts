@@ -1,8 +1,10 @@
-import { savedImageSchema } from "$lib/schema";
-import type { Image, SavedImage } from "$lib/schema";
+import { savedImageSchema, controlSchema } from "$lib/schema";
+import type { Image, Control, SavedImage } from "$lib/schema";
 import * as v from "valibot";
 
-const IMAGES_KEY = "images";
+const IMAGES_KEY = "images.image-grid.tasukaru.app";
+const CONTROL_KEY = "control.image-grid.tasukaru.app";
+
 export const loadImages = async (): Promise<Image[]> => {
   const imagesJsonString = sessionStorage.getItem(IMAGES_KEY);
   if (!imagesJsonString) {
@@ -29,8 +31,20 @@ export const loadImages = async (): Promise<Image[]> => {
       };
     })
   );
-  console.log("Loaded saved images:", savedImages);
   return images;
+};
+
+export const loadControl = async (): Promise<Control | undefined> => {
+  const controlJsonString = sessionStorage.getItem(CONTROL_KEY);
+  if (!controlJsonString) {
+    return undefined;
+  }
+  const parseResult = v.safeParse(controlSchema, JSON.parse(controlJsonString));
+  if (!parseResult.success) {
+    console.error("Failed to parse control:", parseResult.issues);
+    return undefined;
+  }
+  return parseResult.output;
 };
 
 export const saveImages = async (images: Image[]): Promise<void> => {
@@ -46,6 +60,10 @@ export const saveImages = async (images: Image[]): Promise<void> => {
       };
     })
   );
-  console.log(JSON.stringify(savedImages));
   sessionStorage.setItem(IMAGES_KEY, JSON.stringify(savedImages));
+};
+
+export const saveControl = async (control: Control): Promise<void> => {
+  const controlJsonString = JSON.stringify(control);
+  sessionStorage.setItem(CONTROL_KEY, controlJsonString);
 };

@@ -9,7 +9,7 @@
   import * as v from "valibot";
   import { imageFileToBlob } from "$lib/utils";
   import ImageMatrix from "$lib/components/ImageLayout/ImageMatrix.svelte";
-  import { loadImages, saveImages } from "$lib/store";
+  import { loadControl, loadImages, saveControl, saveImages } from "$lib/store";
 
   type Props = {
     controlSnapshot: string;
@@ -97,6 +97,18 @@
     loadImages().then((loadedImages) => {
       images = loadedImages;
     });
+  });
+
+  $effect(() => {
+    loadControl().then((loadedControl) => {
+      if (loadedControl) {
+        control = loadedControl;
+      }
+    });
+  });
+
+  $effect(() => {
+    saveControl(control);
   });
 
   $effect(() => {
