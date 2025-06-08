@@ -51,7 +51,7 @@
         <span class="text-xs">キャンセル</span>
       </AlertDialog.Cancel>
       <AlertDialog.Destructive onclick={() => onClickDeleteButton()}>
-        <span class="text-xs">削除する</span>
+        <span class="text-xs">削除する </span>
       </AlertDialog.Destructive>
     </AlertDialog.Footer>
   </AlertDialog.Content>

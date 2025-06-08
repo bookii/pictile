@@ -10,7 +10,7 @@
 
 <AlertDialog.Root bind:open={isAlertDialogOpen}>
   <AlertDialog.Trigger>
-    <Button variant="destructive">
+    <Button variant="outline">
       <span class="text-xs">データを初期化する</span>
     </Button>
   </AlertDialog.Trigger>
@@ -33,7 +33,7 @@
           isAlertDialogOpen = false;
         }}
       >
-        <span class="text-xs">削除する</span>
+        <span class="text-xs">初期化する</span>
       </AlertDialog.Destructive>
     </AlertDialog.Footer>
   </AlertDialog.Content>
