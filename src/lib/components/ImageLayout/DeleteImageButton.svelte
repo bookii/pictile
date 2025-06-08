@@ -10,11 +10,13 @@
   };
   const { image, onDelete }: Props = $props();
   let imageUrl: string | undefined = $state(undefined);
+  let isAlertDialogOpen = $state(false);
 
   const onClickDeleteButton = () => {
     if (onDelete) {
       onDelete(image.id);
     }
+    isAlertDialogOpen = false;
   };
 
   $effect(() => {
@@ -27,7 +29,7 @@
   });
 </script>
 
-<AlertDialog.Root>
+<AlertDialog.Root bind:open={isAlertDialogOpen}>
   <AlertDialog.Trigger>
     <Button variant="secondary" size="icon" class="size-5 opacity-80">
       <X class="size-4 text-white" />
