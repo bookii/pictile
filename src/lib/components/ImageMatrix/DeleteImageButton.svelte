@@ -42,7 +42,11 @@
       </AlertDialog.Title>
       <AlertDialog.Description>
         <span class="flex justify-center sm:justify-normal">
-          <img src={imageUrl} alt="" class="size-16 justify-center" />
+          <img
+            src={imageUrl}
+            alt=""
+            class="size-16 justify-center aspect-square object-contain"
+          />
         </span>
       </AlertDialog.Description>
     </AlertDialog.Header>
