@@ -1,7 +1,7 @@
 <script lang="ts">
   import ControlPanel from "$lib/components/ControlPanel.svelte";
   import DropZone from "$lib/components/DropZone.svelte";
-  import ImageMatrix from "$lib/components/ImageLayout/ImageMatrix.svelte";
+  import ImageMatrix from "$lib/components/ImageMatrix/ImageMatrix.svelte";
   import { Toaster } from "$lib/components/ui/sonner";
   import { Constants } from "$lib/constants.js";
   import { DBClient } from "$lib/db-client";

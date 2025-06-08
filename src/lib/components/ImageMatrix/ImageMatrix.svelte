@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ImageCell from "$lib/components/ImageLayout/ImageCell.svelte";
+  import ImageCell from "$lib/components/ImageMatrix/ImageCell.svelte";
   import { Constants } from "$lib/constants";
   import type { Control, Image } from "$lib/schema";
 

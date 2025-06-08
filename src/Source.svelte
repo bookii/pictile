@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ImageMatrix from "$lib/components/ImageLayout/ImageMatrix.svelte";
+  import ImageMatrix from "$lib/components/ImageMatrix/ImageMatrix.svelte";
   import { Constants } from "$lib/constants";
   import { DBClient } from "$lib/db-client";
   import type { Control, Image } from "$lib/schema";
