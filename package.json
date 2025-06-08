@@ -10,7 +10,8 @@
     "build:source": "vite build --mode source",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
-    "extract-licenses": "pnpm license-checker --customPath ./license-format.json --json | node scripts/generate-licenses.js"
+    "extract-licenses": "pnpm license-checker --customPath ./license-format.json --json | node scripts/generate-licenses.js",
+    "package": "cd dist && zip -r pictile.zip . -x \"*.DS_Store\" -x \"pictile*\" && cd .."
   },
   "devDependencies": {
     "@internationalized/date": "^3.8.1",
