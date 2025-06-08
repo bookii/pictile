@@ -3,12 +3,12 @@
   import ControlPanel from "$lib/components/ControlPanel.svelte";
   import { Constants } from "$lib/constants.js";
   import DropZone from "$lib/components/DropZone.svelte";
-  import { messageSchema } from "$lib/schema";
   import type { Control, Image, Message } from "$lib/schema";
-  import * as v from "valibot";
   import { imageFileToBlob } from "$lib/utils";
   import ImageMatrix from "$lib/components/ImageLayout/ImageMatrix.svelte";
   import { DBClient } from "$lib/db-client";
+  import { Toaster } from "$lib/components/ui/sonner";
+  import { toast } from "svelte-sonner";
 
   type Props = {
     shouldUpdateControl: boolean;
@@ -29,8 +29,9 @@
   const onDropSuccess = async (files: File[]) => {
     for (const file of files) {
       if (images.length >= Constants.MAX_IMAGE_COUNT) {
-        // TODO: toast 表示
-        console.error("Maximum image count exceeded");
+        toast.error(
+          `表示できる画像は最大${Constants.MAX_IMAGE_COUNT}件までです`
+        );
         return;
       }
       const blob = await imageFileToBlob(file);
@@ -55,6 +56,7 @@
     await dbClient.clear();
     initializeImages();
     initializeControl();
+    toast.success("データを初期化しました");
     const message: Message = {
       type: "clear",
     };
@@ -99,10 +101,10 @@
   <DropZone
     {onDropSuccess}
     onDropFailure={(message) => {
-      // TODO: toast 表示
-      console.error("Invalid drop:", message);
+      toast.error(message);
     }}
   />
   <ControlPanel bind:control {onClear} />
   <ImageMatrix mode="dock" {control} {images} onDelete={onDeleteImage} />
+  <Toaster />
 </div>
