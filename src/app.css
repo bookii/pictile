@@ -9,6 +9,7 @@
   --radius: 0.625rem;
   --background: oklch(0.2858 0.017 270.76);
   --foreground: oklch(1 0 0);
+  --popover: oklch(0.4137 0.0243 269.8);
   --primary: oklch(0.5594 0.1706 266.92);
   --secondary: oklch(0.3729 0.0229 271.78);
   --tertiary: oklch(0.4137 0.0243 269.8);
@@ -28,6 +29,7 @@
   --radius-xl: calc(var(--radius) + 4px);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-popover: var(--popover);
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-tertiary: var(--tertiary);
