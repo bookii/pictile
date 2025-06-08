@@ -10,7 +10,7 @@
     "build:source": "vite build --mode source",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.app.json && tsc -p tsconfig.node.json",
-    "extract-licenses": "pnpm license-checker --customPath ./license-format.json --json | node scripts/generate-license.js"
+    "extract-licenses": "pnpm license-checker --customPath ./license-format.json --json | node scripts/generate-licenses.js"
   },
   "devDependencies": {
     "@internationalized/date": "^3.8.1",
