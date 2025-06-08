@@ -66,7 +66,7 @@ async function generateLicenseText() {
     // フッター
     output +=
       "===============================================================================\n\n";
-    output += "Generated for Pictile\n\n";
+    output += "Generated for PICTILE\n\n";
     output += "NOTICE:\n";
     output +=
       "This file lists third-party software components and their licenses.\n";
