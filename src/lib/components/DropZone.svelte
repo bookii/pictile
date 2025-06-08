@@ -4,7 +4,7 @@
   import { ImagePlus, LoaderCircle } from "lucide-svelte";
 
   type Props = {
-    onDropSuccess: (file: File) => Promise<void>;
+    onDropSuccess: (files: File[]) => Promise<void>;
     onDropFailure: (message: string) => void;
   };
   const { onDropSuccess, onDropFailure }: Props = $props();
@@ -28,26 +28,21 @@
       return;
     }
     event.preventDefault();
-    const files = event.dataTransfer.files;
+    const files = Array.from(event.dataTransfer.files);
     if (files.length === 0) {
       console.error("No files found");
       return;
     }
-    if (files.length > 1) {
-      onDropFailure("画像は1つずつドロップしてください");
+    if (files.some((file) => !file.type.startsWith("image/"))) {
+      onDropFailure("無効な形式のファイルが含まれています");
       return;
     }
-    const file = files[0];
-    if (!file.type.startsWith("image/")) {
-      onDropFailure("無効なファイル形式です");
-      return;
-    }
-    if (file.size > 1024 * 1024) {
-      onDropFailure("ファイルサイズは1MB以下にしてください");
+    if (files.some((file) => file.size > 1024 * 1024)) {
+      onDropFailure("ファイルサイズは全て1MB以下にしてください");
       return;
     }
     isProcessing = true;
-    await onDropSuccess(file);
+    await onDropSuccess(files);
     isProcessing = false;
   };
 </script>

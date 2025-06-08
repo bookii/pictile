@@ -26,25 +26,27 @@
   let images: Image[] = $state([]);
   let control: Control = $state(Constants.DEFAULT_CONTROL);
 
-  const onDropSuccess = async (file: File) => {
-    if (images.length >= Constants.MAX_IMAGE_COUNT) {
-      // TODO: toast 表示
-      console.error("Maximum image count exceeded");
-      return;
+  const onDropSuccess = async (files: File[]) => {
+    for (const file of files) {
+      if (images.length >= Constants.MAX_IMAGE_COUNT) {
+        // TODO: toast 表示
+        console.error("Maximum image count exceeded");
+        return;
+      }
+      const id = ulid();
+      const blob = await imageFileToBlob(file);
+      const image: Image = {
+        id,
+        blob,
+      };
+      images = [...images, image];
+      const message: Message = {
+        type: "add_image",
+        image,
+      };
+      broadcastChannel.postMessage(message);
+      saveImages(images);
     }
-    const id = ulid();
-    const blob = await imageFileToBlob(file);
-    const image: Image = {
-      id,
-      blob,
-    };
-    images = [...images, image];
-    const message: Message = {
-      type: "add_image",
-      image,
-    };
-    broadcastChannel.postMessage(message);
-    saveImages(images);
   };
 
   const onDelete = (id: string) => {
