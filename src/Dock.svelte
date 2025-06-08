@@ -5,23 +5,23 @@
   import DropZone from "$lib/components/DropZone.svelte";
   import { messageSchema } from "$lib/schema";
   import type { Control, Image, Message } from "$lib/schema";
-  import { ulid } from "ulid";
   import * as v from "valibot";
   import { imageFileToBlob } from "$lib/utils";
   import ImageMatrix from "$lib/components/ImageLayout/ImageMatrix.svelte";
-  import { loadControl, loadImages, saveControl, saveImages } from "$lib/store";
+  import { DBClient } from "$lib/db-client";
 
   type Props = {
-    controlSnapshot: string;
+    shouldUpdateControl: boolean;
   };
 
   const props: Props = {
-    controlSnapshot: JSON.stringify(Constants.DEFAULT_CONTROL),
+    shouldUpdateControl: false,
   };
 
   const broadcastChannel = new BroadcastChannel(
     Constants.BROADCAST_CHANNEL_NAME
   );
+  const dbClient = new DBClient();
 
   let images: Image[] = $state([]);
   let control: Control = $state(Constants.DEFAULT_CONTROL);
@@ -33,30 +33,25 @@
         console.error("Maximum image count exceeded");
         return;
       }
-      const id = ulid();
       const blob = await imageFileToBlob(file);
-      const image: Image = {
-        id,
-        blob,
-      };
+      const image = await dbClient.addImage({ blob });
       images = [...images, image];
       const message: Message = {
         type: "add_image",
         image,
       };
       broadcastChannel.postMessage(message);
-      saveImages(images);
     }
   };
 
-  const onDelete = (id: string) => {
+  const onDelete = (id: number) => {
+    dbClient.deleteImage(id);
     images = images.filter((image) => image.id !== id);
     const message: Message = {
       type: "delete_image",
       id,
     };
     broadcastChannel.postMessage(message);
-    saveImages(images);
   };
 
   const messageHandler = async (event: MessageEvent) => {
@@ -83,7 +78,6 @@
               }),
             },
           };
-          console.log("Sending image to source:", addImageMessage);
           broadcastChannel.postMessage(addImageMessage);
           // 負荷分散のために sleep を入れる
           await new Promise((resolve) => setTimeout(resolve, 10));
@@ -96,39 +90,33 @@
   };
 
   $effect(() => {
-    loadImages().then((loadedImages) => {
+    dbClient.images.then((loadedImages) => {
       images = loadedImages;
     });
-  });
-
-  $effect(() => {
-    loadControl().then((loadedControl) => {
+    dbClient.control.then((loadedControl) => {
       if (loadedControl) {
         control = loadedControl;
       }
+      props.shouldUpdateControl = true;
     });
-  });
-
-  $effect(() => {
-    saveControl(control);
   });
 
   $effect(() => {
     broadcastChannel.addEventListener("message", messageHandler);
-
-    const updatedControlSnapshot = JSON.stringify(control);
-    if (props.controlSnapshot !== updatedControlSnapshot) {
-      broadcastChannel.postMessage({
-        type: "control",
-        // 複製しないと送信できない
-        control: { ...control },
-      });
-      props.controlSnapshot = updatedControlSnapshot;
-    }
-
     return () => {
       broadcastChannel.removeEventListener("message", messageHandler);
     };
+  });
+
+  $effect(() => {
+    broadcastChannel.postMessage({
+      type: "control",
+      // 複製しないと送信できない
+      control: { ...control },
+    });
+    if (props.shouldUpdateControl) {
+      dbClient.updateControl(control);
+    }
   });
 </script>
 

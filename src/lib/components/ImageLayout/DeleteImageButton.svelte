@@ -6,7 +6,7 @@
 
   type Props = {
     image: Image;
-    onDelete?: (id: string) => void;
+    onDelete?: (id: number) => void;
   };
   const { image, onDelete }: Props = $props();
   let imageUrl: string | undefined = $state(undefined);

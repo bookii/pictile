@@ -1,0 +1,74 @@
+import { controlSchema } from "$lib/schema";
+import type { Image, Control } from "$lib/schema";
+import { Constants } from "$lib/constants";
+import Dexie, { type EntityTable } from "dexie";
+
+type InsertControl = Omit<Control, "id">;
+type InsertImage = Omit<Image, "id">;
+
+class DB extends Dexie {
+  control!: EntityTable<Control, "id">;
+  image!: EntityTable<Image, "id">;
+
+  constructor() {
+    super("image-grid.tasukaru.app");
+    this.version(1).stores({
+      control: "++id",
+      image: "++id",
+    });
+  }
+}
+
+export class DBClient {
+  private db: DB;
+  constructor(db: DB = new DB()) {
+    this.db = db;
+  }
+
+  public get control(): Promise<Control | undefined> {
+    return (async () => {
+      const controls = await this.db.control.toArray();
+      if (controls.length > 0) {
+        return controls[0];
+      }
+    })();
+  }
+
+  public async updateControl(
+    newControl: Partial<InsertControl>
+  ): Promise<Control> {
+    const controls = await this.db.control.toArray();
+    if (controls.length > 0) {
+      await this.db.control.update(controls[0].id, newControl);
+      return { ...controls[0], ...newControl };
+    }
+    // レコードが存在しなければ新規作成する
+    const id = await this.db.control.add({
+      ...newControl,
+      ...Constants.DEFAULT_CONTROL,
+    });
+    const insertedConfiguration = await this.db.control.get(id);
+    if (!insertedConfiguration) {
+      throw new Error("Failed to create default configuration");
+    }
+    return insertedConfiguration;
+  }
+
+  public get images(): Promise<Image[]> {
+    return this.db.image.toArray();
+  }
+
+  public async addImage(image: InsertImage): Promise<Image> {
+    const id = await this.db.image.add(image);
+    return { id, ...image };
+  }
+
+  public async deleteImage(id: number): Promise<void> {
+    await this.db.image.delete(id);
+  }
+
+  public async clear(): Promise<void> {
+    await this.db.control.clear();
+    await this.db.image.clear();
+  }
+}

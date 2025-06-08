@@ -7,7 +7,7 @@
   type Props = {
     image: Image;
     mode: Mode;
-    onDelete?: (id: string) => void;
+    onDelete?: (id: number) => void;
   };
   const { image, mode, onDelete }: Props = $props();
 

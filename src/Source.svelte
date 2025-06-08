@@ -4,10 +4,12 @@
   import type { Control, Image, Message } from "$lib/schema";
   import ImageMatrix from "$lib/components/ImageLayout/ImageMatrix.svelte";
   import * as v from "valibot";
+  import { DBClient } from "$lib/db-client";
 
   const broadcastChannel = new BroadcastChannel(
     Constants.BROADCAST_CHANNEL_NAME
   );
+  const dbClient = new DBClient();
 
   let images: Image[] = $state([]);
   let control: Control = $state(Constants.DEFAULT_CONTROL);
@@ -29,21 +31,25 @@
       case "delete_image":
         images = images.filter((image) => image.id !== message.id);
         break;
-      case "initialize_source_request":
-        console.error("initialize_source_request must not be received in Dock");
-        break;
     }
   };
 
   $effect(() => {
     broadcastChannel.addEventListener("message", messageHandler);
-    let message: Message = {
-      type: "initialize_source_request",
-    };
-    broadcastChannel.postMessage(message);
     return () => {
       broadcastChannel.removeEventListener("message", messageHandler);
     };
+  });
+
+  $effect(() => {
+    dbClient.images.then((fetchedImages) => {
+      images = fetchedImages;
+    });
+    dbClient.control.then((fetchedControl) => {
+      if (fetchedControl) {
+        control = fetchedControl;
+      }
+    });
   });
 </script>
 

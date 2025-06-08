@@ -8,12 +8,11 @@
     mode: Mode;
     control: Control;
     images: Image[];
-    onDelete?: (id: string) => void;
+    onDelete?: (id: number) => void;
   };
   const { mode, control, images, onDelete }: Props = $props();
 
   let itemSize = $state(0);
-  let a: Image[] = $state([]);
   let elementRecord: Record<number, HTMLElement | undefined> = $state({});
   let resizeObserver: ResizeObserver | undefined = $state(undefined);
   let animationFrameId: number | undefined = $state(undefined);
@@ -68,7 +67,6 @@
   };
 
   $effect(() => {
-    a = images;
     if (elementRecord[0]) {
       const observer = new ResizeObserver(resizeHandler);
       observer.observe(elementRecord[0]);

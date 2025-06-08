@@ -1,17 +1,12 @@
 import * as v from "valibot";
 
 export const imageSchema = v.object({
-  id: v.pipe(v.string(), v.ulid()),
+  id: v.number(),
   blob: v.blob(),
 });
 
-export const savedImageSchema = v.object({
-  id: v.pipe(v.string(), v.ulid()),
-  arrayBufferString: v.string(),
-  type: v.string(),
-});
-
 export const controlSchema = v.object({
+  id: v.number(),
   isPlaceholderVisible: v.boolean(),
   imageSpacingRem: v.number(),
   columnCount: v.number(),
@@ -25,7 +20,7 @@ export const messageSchema = v.union([
   }),
   v.object({
     type: v.literal("delete_image"),
-    id: v.pipe(v.string(), v.ulid()),
+    id: v.number(),
   }),
   v.object({
     type: v.literal("control"),
@@ -37,6 +32,5 @@ export const messageSchema = v.union([
 ]);
 
 export type Image = v.InferOutput<typeof imageSchema>;
-export type SavedImage = v.InferOutput<typeof savedImageSchema>;
 export type Control = v.InferOutput<typeof controlSchema>;
 export type Message = v.InferOutput<typeof messageSchema>;
