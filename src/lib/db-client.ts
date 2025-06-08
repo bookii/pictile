@@ -25,12 +25,13 @@ export class DBClient {
     this.db = db;
   }
 
-  public get control(): Promise<Control | undefined> {
+  public get control(): Promise<Control> {
     return (async () => {
       const controls = await this.db.control.toArray();
       if (controls.length > 0) {
         return controls[0];
       }
+      return Constants.DEFAULT_CONTROL;
     })();
   }
 

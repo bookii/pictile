@@ -27,7 +27,7 @@ export const messageSchema = v.union([
     control: controlSchema,
   }),
   v.object({
-    type: v.literal("initialize_source_request"),
+    type: v.literal("clear"),
   }),
 ]);
 

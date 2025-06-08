@@ -44,68 +44,43 @@
     }
   };
 
-  const onDelete = (id: number) => {
+  const onDeleteImage = (id: number) => {
     dbClient.deleteImage(id);
     images = images.filter((image) => image.id !== id);
+    const message: Message = { type: "delete_image", id };
+    broadcastChannel.postMessage(message);
+  };
+
+  const onClear = async () => {
+    await dbClient.clear();
+    initializeImages();
+    initializeControl();
     const message: Message = {
-      type: "delete_image",
-      id,
+      type: "clear",
     };
     broadcastChannel.postMessage(message);
   };
 
-  const messageHandler = async (event: MessageEvent) => {
-    const parseResult = v.safeParse(messageSchema, event.data);
-    if (!parseResult.success) {
-      console.error("Invalid message format:", event.data);
-      return;
-    }
-    const message = parseResult.output;
-    switch (message.type) {
-      case "initialize_source_request":
-        const controlMessage: Message = {
-          type: "control",
-          control: { ...control },
-        };
-        broadcastChannel.postMessage(controlMessage);
-        for (const image of images) {
-          const addImageMessage: Message = {
-            type: "add_image",
-            image: {
-              id: image.id,
-              blob: new Blob([image.blob], {
-                type: image.blob.type,
-              }),
-            },
-          };
-          broadcastChannel.postMessage(addImageMessage);
-          // 負荷分散のために sleep を入れる
-          await new Promise((resolve) => setTimeout(resolve, 10));
-        }
-        break;
-      default:
-        console.error(`message "${message.type}" must not be received in Dock`);
-        break;
-    }
-  };
-
-  $effect(() => {
+  const initializeImages = () => {
     dbClient.images.then((loadedImages) => {
       images = loadedImages;
     });
-    dbClient.control.then((loadedControl) => {
-      if (loadedControl) {
+  };
+
+  const initializeControl = async () => {
+    props.shouldUpdateControl = false;
+    await new Promise((resolve) => {
+      dbClient.control.then((loadedControl) => {
         control = loadedControl;
-      }
-      props.shouldUpdateControl = true;
+        resolve({});
+      });
     });
-  });
+    props.shouldUpdateControl = true;
+  };
 
   $effect(() => {
-    broadcastChannel.addEventListener("message", messageHandler);
-    return () => {
-      broadcastChannel.removeEventListener("message", messageHandler);
-    };
+    initializeImages();
+    initializeControl();
   });
 
   $effect(() => {
@@ -128,6 +103,6 @@
       console.error("Invalid drop:", message);
     }}
   />
-  <ControlPanel bind:control />
-  <ImageMatrix mode="dock" {control} {images} {onDelete} />
+  <ControlPanel bind:control {onClear} />
+  <ImageMatrix mode="dock" {control} {images} onDelete={onDeleteImage} />
 </div>

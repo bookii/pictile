@@ -31,7 +31,23 @@
       case "delete_image":
         images = images.filter((image) => image.id !== message.id);
         break;
+      case "clear":
+        images = [];
+        control = Constants.DEFAULT_CONTROL;
+        break;
     }
+  };
+
+  const initializeImages = () => {
+    dbClient.images.then((loadedImages) => {
+      images = loadedImages;
+    });
+  };
+
+  const initializeControl = () => {
+    dbClient.control.then((loadedControl) => {
+      control = loadedControl;
+    });
   };
 
   $effect(() => {
@@ -42,14 +58,8 @@
   });
 
   $effect(() => {
-    dbClient.images.then((fetchedImages) => {
-      images = fetchedImages;
-    });
-    dbClient.control.then((fetchedControl) => {
-      if (fetchedControl) {
-        control = fetchedControl;
-      }
-    });
+    initializeImages();
+    initializeControl();
   });
 </script>
 
