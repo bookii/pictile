@@ -2,13 +2,14 @@
   import { Constants } from "$lib/constants";
   import { messageSchema } from "$lib/schema";
   import type { Control, Image, Message } from "$lib/schema";
+  import ImageMatrix from "$lib/components/ImageLayout/ImageMatrix.svelte";
   import * as v from "valibot";
 
   const broadcastChannel = new BroadcastChannel(
     Constants.BROADCAST_CHANNEL_NAME
   );
 
-  let imageRecord: Record<string, Image> = $state({});
+  let images: Image[] = $state([]);
   let control: Control = $state(Constants.DEFAULT_CONTROL);
 
   const messageHandler = async (event: MessageEvent) => {
@@ -22,17 +23,14 @@
       case "control":
         control = message.control;
         break;
-      case "image":
-        imageRecord[message.image.id] = message.image;
+      case "add_image":
+        images = [...images, message.image];
+        break;
+      case "delete_image":
+        images = images.filter((image) => image.id !== message.id);
         break;
       case "initialize_source_request":
         console.error("initialize_source_request must not be received in Dock");
-        break;
-      case "initialize_source_response":
-        for (const image of message.images) {
-          imageRecord[image.id] = image;
-        }
-        control = message.control;
         break;
     }
   };
@@ -48,3 +46,5 @@
     };
   });
 </script>
+
+<ImageMatrix mode="source" {control} {images} />

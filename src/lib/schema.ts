@@ -14,8 +14,12 @@ export const controlSchema = v.object({
 
 export const messageSchema = v.union([
   v.object({
-    type: v.literal("image"),
+    type: v.literal("add_image"),
     image: imageSchema,
+  }),
+  v.object({
+    type: v.literal("delete_image"),
+    id: v.pipe(v.string(), v.ulid()),
   }),
   v.object({
     type: v.literal("control"),
@@ -23,11 +27,6 @@ export const messageSchema = v.union([
   }),
   v.object({
     type: v.literal("initialize_source_request"),
-  }),
-  v.object({
-    type: v.literal("initialize_source_response"),
-    images: v.array(imageSchema),
-    control: controlSchema,
   }),
 ]);
 

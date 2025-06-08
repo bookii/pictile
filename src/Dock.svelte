@@ -8,6 +8,7 @@
   import { ulid } from "ulid";
   import * as v from "valibot";
   import { convertImageFileToBlob } from "$lib/utils";
+  import ImageMatrix from "$lib/components/ImageLayout/ImageMatrix.svelte";
 
   type Props = {
     controlSnapshot: string;
@@ -21,12 +22,11 @@
     Constants.BROADCAST_CHANNEL_NAME
   );
 
-  let imageRecord: Record<string, Image> = $state({});
+  let images: Image[] = $state([]);
   let control: Control = $state(Constants.DEFAULT_CONTROL);
-  let blobUrlString: string | undefined = $state(undefined);
 
   const onDropSuccess = async (file: File) => {
-    if (Object.keys(imageRecord).length >= Constants.MAX_IMAGE_COUNT) {
+    if (images.length >= Constants.MAX_IMAGE_COUNT) {
       // TODO: toast 表示
       console.error("Maximum image count exceeded");
       return;
@@ -37,12 +37,21 @@
       id,
       blob,
     };
-    imageRecord[id] = image;
-    broadcastChannel.postMessage({
-      type: "image",
+    images = [...images, image];
+    const message: Message = {
+      type: "add_image",
       image,
-    });
-    blobUrlString = URL.createObjectURL(blob);
+    };
+    broadcastChannel.postMessage(message);
+  };
+
+  const onDelete = (id: string) => {
+    images = images.filter((image) => image.id !== id);
+    const message: Message = {
+      type: "delete_image",
+      id,
+    };
+    broadcastChannel.postMessage(message);
   };
 
   const messageHandler = async (event: MessageEvent) => {
@@ -53,24 +62,30 @@
     }
     const message = parseResult.output;
     switch (message.type) {
-      case "control":
-        console.error("message 'control' must not be received in Dock");
-        break;
-      case "image":
-        console.error("message 'image' must not be received in Dock");
-        break;
       case "initialize_source_request":
-        const responseMessage: Message = {
-          type: "initialize_source_response",
-          images: Object.values({ ...imageRecord }),
+        const controlMessage: Message = {
+          type: "control",
           control: { ...control },
         };
-        broadcastChannel.postMessage(responseMessage);
+        broadcastChannel.postMessage(controlMessage);
+        for (const image of images) {
+          const addImageMessage: Message = {
+            type: "add_image",
+            image: {
+              id: image.id,
+              blob: new Blob([image.blob], {
+                type: image.blob.type,
+              }),
+            },
+          };
+          console.log("Sending image to source:", addImageMessage);
+          broadcastChannel.postMessage(addImageMessage);
+          // 負荷分散のために sleep を入れる
+          await new Promise((resolve) => setTimeout(resolve, 10));
+        }
         break;
-      case "initialize_source_response":
-        console.error(
-          "message 'initialize_source_response' must not be received in Dock"
-        );
+      default:
+        console.error(`message "${message.type}" must not be received in Dock`);
         break;
     }
   };
@@ -102,9 +117,6 @@
       console.error("Invalid drop:", message);
     }}
   />
-
   <ControlPanel bind:control />
-  {#if blobUrlString}
-    <img src={blobUrlString} alt="test" />
-  {/if}
+  <ImageMatrix mode="dock" {control} {images} {onDelete} />
 </div>
