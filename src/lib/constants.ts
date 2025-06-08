@@ -8,7 +8,7 @@ type ConstantsType = {
 };
 
 export const Constants: ConstantsType = {
-  BROADCAST_CHANNEL_NAME: "image-grid.tasukaru.app",
+  BROADCAST_CHANNEL_NAME: "pictile.tasukaru.app",
   MAX_IMAGE_SIZE_PX: 200,
   MAX_IMAGE_COUNT: 100,
   DEFAULT_CONTROL: {

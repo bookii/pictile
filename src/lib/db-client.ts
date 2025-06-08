@@ -11,7 +11,7 @@ class DB extends Dexie {
   image!: EntityTable<Image, "id">;
 
   constructor() {
-    super("image-grid.tasukaru.app");
+    super("pictile.tasukaru.app");
     this.version(1).stores({
       control: "++id",
       image: "++id",
