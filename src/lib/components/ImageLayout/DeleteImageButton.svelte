@@ -38,7 +38,7 @@
   <AlertDialog.Content class="p-4">
     <AlertDialog.Header>
       <AlertDialog.Title>
-        <span class="text-xs">本当にこの画像を削除しますか？</span>
+        <span class="text-xs">この画像を削除してもよろしいですか？</span>
       </AlertDialog.Title>
       <AlertDialog.Description>
         <span class="flex justify-center sm:justify-normal">
