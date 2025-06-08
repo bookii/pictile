@@ -27,7 +27,7 @@
   <img
     src={imageUrl}
     alt=""
-    class="absolute inset-0 aspect-square object-cover size-full"
+    class="absolute inset-0 aspect-square object-contain size-full"
   />
   {#if mode === "dock"}
     <div
