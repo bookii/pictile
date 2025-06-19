@@ -26,7 +26,7 @@
         return;
       }
       animationFrameId = requestAnimationFrame(() => {
-        itemSize = entry.contentBoxSize[0].blockSize;
+        itemSize = Math.min(entry.contentRect.width, entry.contentRect.height);
       });
     }
   };
@@ -87,7 +87,7 @@
 
 <div
   class="grid {gridColumnClass(control.columnCount)}"
-  style="gap: {control.imageSpacingRem *
+  style="gap: {control.imageSpacing *
     (itemSize / Constants.MAX_IMAGE_SIZE_PX)}rem;"
 >
   {#each { length: control.columnCount * control.rowCount }, index}
@@ -97,9 +97,19 @@
       {control.isPlaceholderVisible
         ? placeholderBgClass(control.columnCount, index)
         : ''}"
+      style="aspect-ratio: {control.cellAspectRatio.width /
+        control.cellAspectRatio.height};"
     >
       {#if index < images.length}
-        <ImageCell image={images[index]} {mode} {onDelete} />
+        <ImageCell
+          image={images[index]}
+          cellAspectRatio={{
+            width: control.cellAspectRatio.width,
+            height: control.cellAspectRatio.height,
+          }}
+          {mode}
+          {onDelete}
+        />
       {:else}
         <!-- placeholder -->
         <svg width="100%" height="100%" />

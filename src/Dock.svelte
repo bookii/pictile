@@ -52,13 +52,22 @@
     broadcastChannel.postMessage(message);
   };
 
-  const onClear = async () => {
-    await dbClient.clear();
-    initializeImages();
+  const onClearControl = async () => {
+    await dbClient.clearControl();
     initializeControl();
-    toast.success("データを初期化しました");
+    toast.success("設定を初期化しました");
     const message: Message = {
-      type: "clear",
+      type: "clear_control",
+    };
+    broadcastChannel.postMessage(message);
+  };
+
+  const onClearImages = async () => {
+    await dbClient.clearImages();
+    initializeImages();
+    toast.success("全ての画像を削除しました");
+    const message: Message = {
+      type: "clear_images",
     };
     broadcastChannel.postMessage(message);
   };
@@ -86,13 +95,13 @@
   });
 
   $effect(() => {
+    const copiedControl = JSON.parse(JSON.stringify(control));
     broadcastChannel.postMessage({
       type: "control",
-      // 複製しないと送信できない
-      control: { ...control },
+      control: copiedControl,
     });
     if (props.shouldUpdateControl) {
-      dbClient.updateControl(control);
+      dbClient.updateControl(copiedControl);
     }
   });
 </script>
@@ -104,7 +113,7 @@
       toast.error(message);
     }}
   />
-  <ControlPanel bind:control {onClear} />
+  <ControlPanel bind:control {onClearControl} {onClearImages} />
   <ImageMatrix mode="dock" {control} {images} onDelete={onDeleteImage} />
   <Toaster />
 </div>

@@ -15,6 +15,20 @@ class DB extends Dexie {
       control: "++id",
       image: "++id",
     });
+
+    this.version(2)
+      .stores({
+        control: "++id",
+        image: "++id",
+      })
+      .upgrade((tx) => {
+        return tx
+          .table("control")
+          .toCollection()
+          .modify((control) => {
+            control.cellAspectRatio = { width: 1, height: 1 };
+          });
+      });
   }
 }
 
@@ -67,8 +81,11 @@ export class DBClient {
     await this.db.image.delete(id);
   }
 
-  public async clear(): Promise<void> {
+  public async clearControl(): Promise<void> {
     await this.db.control.clear();
+  }
+
+  public async clearImages(): Promise<void> {
     await this.db.image.clear();
   }
 }

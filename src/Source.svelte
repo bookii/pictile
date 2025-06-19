@@ -31,9 +31,11 @@
       case "delete_image":
         images = images.filter((image) => image.id !== message.id);
         break;
-      case "clear":
-        images = [];
+      case "clear_control":
         control = Constants.DEFAULT_CONTROL;
+        break;
+      case "clear_images":
+        images = [];
         break;
     }
   };
