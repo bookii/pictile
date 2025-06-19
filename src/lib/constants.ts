@@ -15,6 +15,7 @@ export const Constants: ConstantsType = {
     id: 0,
     isPlaceholderVisible: true,
     imageSpacingRem: 1,
+    cellAspectRatio: { width: 1, height: 1 },
     columnCount: 5,
     rowCount: 4,
   },

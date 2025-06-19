@@ -97,12 +97,19 @@
       {control.isPlaceholderVisible
         ? placeholderBgClass(control.columnCount, index)
         : ''}"
+      style="aspect-ratio: {control.cellAspectRatio.width /
+        control.cellAspectRatio.height};"
     >
       {#if index < images.length}
-        <ImageCell image={images[index]} {mode} {onDelete} />
+        <ImageCell
+          image={images[index]}
+          cellAspectRatio={{ width: 1, height: 1 }}
+          {mode}
+          {onDelete}
+        />
       {:else}
         <!-- placeholder -->
-        <svg width="100%" height="100%" />
+        <svg width="100" height="100%" />
       {/if}
     </div>
   {/each}

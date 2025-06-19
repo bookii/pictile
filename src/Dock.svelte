@@ -86,13 +86,13 @@
   });
 
   $effect(() => {
+    const copiedControl = JSON.parse(JSON.stringify(control));
     broadcastChannel.postMessage({
       type: "control",
-      // 複製しないと送信できない
-      control: { ...control },
+      control: copiedControl,
     });
     if (props.shouldUpdateControl) {
-      dbClient.updateControl(control);
+      dbClient.updateControl(copiedControl);
     }
   });
 </script>

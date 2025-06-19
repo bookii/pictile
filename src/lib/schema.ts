@@ -9,6 +9,10 @@ export const controlSchema = v.object({
   id: v.number(),
   isPlaceholderVisible: v.boolean(),
   imageSpacingRem: v.number(),
+  cellAspectRatio: v.object({
+    width: v.number(),
+    height: v.number(),
+  }),
   columnCount: v.number(),
   rowCount: v.number(),
 });
