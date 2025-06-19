@@ -18,8 +18,8 @@ export const Constants: ConstantsType = {
   DEFAULT_CONTROL: {
     id: 0,
     isPlaceholderVisible: true,
-    imageSpacingRem: 1,
-    cellAspectRatio: { width: 16, height: 16 },
+    imageSpacing: 1,
+    cellAspectRatio: { width: 1, height: 1 },
     columnCount: 5,
     rowCount: 4,
   },
