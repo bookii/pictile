@@ -81,8 +81,11 @@ export class DBClient {
     await this.db.image.delete(id);
   }
 
-  public async clear(): Promise<void> {
+  public async clearControl(): Promise<void> {
     await this.db.control.clear();
+  }
+
+  public async clearImages(): Promise<void> {
     await this.db.image.clear();
   }
 }

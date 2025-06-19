@@ -11,15 +11,13 @@
 <AlertDialog.Root bind:open={isAlertDialogOpen}>
   <AlertDialog.Trigger>
     <Button variant="outline">
-      <span class="text-xs">データを初期化する</span>
+      <span class="text-xs">設定を初期化する</span>
     </Button>
   </AlertDialog.Trigger>
   <AlertDialog.Content class="p-4">
     <AlertDialog.Header>
       <AlertDialog.Title>
-        <span class="text-xs">
-          全ての画像を削除して、設定を初期化します。よろしいですか？
-        </span>
+        <span class="text-xs">設定を初期化します。よろしいですか？</span>
       </AlertDialog.Title>
       <AlertDialog.Description />
     </AlertDialog.Header>
@@ -27,14 +25,14 @@
       <AlertDialog.Cancel>
         <span class="text-xs">キャンセル</span>
       </AlertDialog.Cancel>
-      <AlertDialog.Destructive
+      <AlertDialog.Action
         onclick={() => {
           onClear();
           isAlertDialogOpen = false;
         }}
       >
         <span class="text-xs">初期化する</span>
-      </AlertDialog.Destructive>
+      </AlertDialog.Action>
     </AlertDialog.Footer>
   </AlertDialog.Content>
 </AlertDialog.Root>

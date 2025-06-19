@@ -8,7 +8,7 @@ export const imageSchema = v.object({
 export const controlSchema = v.object({
   id: v.number(),
   isPlaceholderVisible: v.boolean(),
-  imageSpacingRem: v.number(),
+  imageSpacing: v.number(),
   cellAspectRatio: v.object({
     width: v.number(),
     height: v.number(),
@@ -31,7 +31,10 @@ export const messageSchema = v.union([
     control: controlSchema,
   }),
   v.object({
-    type: v.literal("clear"),
+    type: v.literal("clear_control"),
+  }),
+  v.object({
+    type: v.literal("clear_images"),
   }),
 ]);
 

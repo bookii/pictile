@@ -26,7 +26,7 @@
         return;
       }
       animationFrameId = requestAnimationFrame(() => {
-        itemSize = entry.contentBoxSize[0].blockSize;
+        itemSize = Math.min(entry.contentRect.width, entry.contentRect.height);
       });
     }
   };
@@ -87,7 +87,7 @@
 
 <div
   class="grid {gridColumnClass(control.columnCount)}"
-  style="gap: {control.imageSpacingRem *
+  style="gap: {control.imageSpacing *
     (itemSize / Constants.MAX_IMAGE_SIZE_PX)}rem;"
 >
   {#each { length: control.columnCount * control.rowCount }, index}
@@ -103,13 +103,16 @@
       {#if index < images.length}
         <ImageCell
           image={images[index]}
-          cellAspectRatio={{ width: 1, height: 1 }}
+          cellAspectRatio={{
+            width: control.cellAspectRatio.width,
+            height: control.cellAspectRatio.height,
+          }}
           {mode}
           {onDelete}
         />
       {:else}
         <!-- placeholder -->
-        <svg width="100" height="100%" />
+        <svg width="100%" height="100%" />
       {/if}
     </div>
   {/each}
