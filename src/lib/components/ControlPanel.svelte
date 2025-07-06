@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as Accordion from "$lib/components/ui/accordion/index";
-  import * as Alert from "$lib/components/ui/Alert/index";
+  import * as Alert from "$lib/components/ui/alert/index";
   import Button from "$lib/components/ui/button/button.svelte";
   import Input from "$lib/components/ui/input/input.svelte";
   import Label from "$lib/components/ui/label/label.svelte";
