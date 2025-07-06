@@ -47,6 +47,17 @@
               bind:value={control.imageSpacing}
             />
           </div>
+          <div class="space-y-3.5 pb-1">
+            <Label class="text-foreground">角丸の大きさ</Label>
+            <Slider
+              type="single"
+              id="corner-radius"
+              min={0}
+              max={Constants.MAX_CORNER_RADIUS_PERCENTAGE}
+              step={2.5}
+              bind:value={control.cornerRadiusPercentage}
+            />
+          </div>
           <div class="space-y-2.5">
             <Label class="text-foreground">画像のアスペクト比（幅：高さ）</Label
             >

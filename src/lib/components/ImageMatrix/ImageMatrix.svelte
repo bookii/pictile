@@ -93,12 +93,14 @@
   {#each { length: control.columnCount * control.rowCount }, index}
     <div
       bind:this={elementRecord[index]}
-      class="aspect-square max-size-full
+      class="aspect-square max-size-full overflow-hidden
       {control.isPlaceholderVisible
         ? placeholderBgClass(control.columnCount, index)
         : ''}"
-      style="aspect-ratio: {control.cellAspectRatio.width /
-        control.cellAspectRatio.height};"
+      style="
+        aspect-ratio: {control.cellAspectRatio.width /
+        control.cellAspectRatio.height};
+        border-radius: {(itemSize * control.cornerRadiusPercentage) / 100}px;"
     >
       {#if index < images.length}
         <ImageCell
