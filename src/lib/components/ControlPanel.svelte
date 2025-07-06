@@ -1,5 +1,6 @@
 <script lang="ts">
   import * as Accordion from "$lib/components/ui/accordion/index";
+  import * as Alert from "$lib/components/ui/Alert/index";
   import Button from "$lib/components/ui/button/button.svelte";
   import Input from "$lib/components/ui/input/input.svelte";
   import Label from "$lib/components/ui/label/label.svelte";
@@ -57,6 +58,16 @@
               step={2.5}
               bind:value={control.cornerRadiusPercentage}
             />
+            {#if control.cornerRadiusPercentage > 0}
+              <Alert.Root class="mt-6">
+                <Alert.Description class="text-xs text-justify leading-relaxed">
+                  角丸を有効にする場合、source.html
+                  を表示しているブラウザソースを右クリックし、「ブレンド方法」を「SRGBオフ」に設定してください。
+                  <br />
+                  「ブレンド方法」が初期設定のままだと、角丸の部分が黒ずんで見えることがあります。
+                </Alert.Description>
+              </Alert.Root>
+            {/if}
           </div>
           <div class="space-y-2.5">
             <Label class="text-foreground">画像のアスペクト比（幅：高さ）</Label
