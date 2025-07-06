@@ -9,6 +9,7 @@ export const controlSchema = v.object({
   id: v.number(),
   isPlaceholderVisible: v.boolean(),
   imageSpacing: v.number(),
+  cornerRadiusPercentage: v.number(),
   cellAspectRatio: v.object({
     width: v.number(),
     height: v.number(),

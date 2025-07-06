@@ -29,6 +29,20 @@ class DB extends Dexie {
             control.cellAspectRatio = { width: 1, height: 1 };
           });
       });
+
+    this.version(3)
+      .stores({
+        control: "++id",
+        image: "++id",
+      })
+      .upgrade((tx) => {
+        return tx
+          .table("control")
+          .toCollection()
+          .modify((control) => {
+            control.cornerRadiusPercentage = 0;
+          });
+      });
   }
 }
 
