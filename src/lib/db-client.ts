@@ -40,7 +40,7 @@ class DB extends Dexie {
           .table("control")
           .toCollection()
           .modify((control) => {
-            control.cornerRadius = 0;
+            control.cornerRadiusPercentage = 0;
           });
       });
   }
